@@ -1,10 +1,13 @@
-require "rubygems"
 require "bundler/setup"
-require "sinatra"
+require 'sinatra'
+require 'tilt/erubis'
+require 'rack'
 require File.join(File.dirname(__FILE__), "environment")
 
-configure do
-  set :views, "#{File.dirname(__FILE__)}/views"
+configure(:development) do
+  require 'sinatra/reloader'
+  require 'pry'
+  also_reload 'lib/sequel_persistence.rb' if development?
 end
 
 helpers do
