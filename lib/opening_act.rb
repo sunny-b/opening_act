@@ -1,5 +1,5 @@
 require "opening_act/version"
 
-module OpeningAct
+class OpeningAct
   # Your code goes here...
 end
