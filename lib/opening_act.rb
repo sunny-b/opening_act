@@ -3,13 +3,15 @@ require 'pry'
 require 'fileutils'
 
 class OpeningAct
+  PROJECT_TEMPLATE = File.expand_path('../opening_act/templates', __FILE__)
+
   def initialize(name, test_name)
     setup(name, test_name)
   end
 
   def perform
-    project_path = File.expand_path('../opening_act/templates/general', __FILE__)
-    FileUtils.copy_entry project_path, @name
+    FileUtils.copy_entry PROJECT_TEMPLATE, @name
+    
   end
 
   private
@@ -24,7 +26,7 @@ class OpeningAct
 
   def get_name
     loop do
-      puts "What do you want to name your project?"
+      puts "> What do you want to name your project?"
       name = STDIN.gets.chomp
 
       return name unless name.empty?
@@ -35,7 +37,7 @@ class OpeningAct
   def get_test_type
     tests = ['minitest', 'rspec']
     loop do
-      puts "Do you prefer rspec or minitest?"
+      puts "> Do you prefer rspec or minitest?"
       type = STDIN.gets.chomp
 
       return type if tests.include? type
