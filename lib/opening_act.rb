@@ -115,6 +115,14 @@ class OpeningAct
     puts
   end
 
+  def play_on?
+    puts "> Running this command will initiate a git project."
+    puts "> Make sure you are not running this command inside another git project."
+    puts "> Type HALT if you wish to stop. Otherwise, click Enter."
+
+    return STDIN.gets.chomp.downcase != 'halt' 
+  end
+
   def remove_files(test_type)
     FileUtils.rm_rf("#{name}/#{test_type}")
     FileUtils.rm Dir.glob("#{name}/*_#{test_type}")
@@ -135,6 +143,8 @@ class OpeningAct
   end
 
   def setup(project_name, test_type)
+    leave_the_stage unless play_on?
+
     project_name = get_project_name unless valid_name?(project_name)
     test_type = get_test_type unless valid_test?(test_type)
 

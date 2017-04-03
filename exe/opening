@@ -3,9 +3,4 @@ require_relative '../lib/opening_act.rb'
 
 project_name, test_type, *rest = ARGV
 
-puts "> Running this command will initiate a git project."
-puts "> Make sure you are not running this command inside another git project."
-puts "> Type HALT if you wish to stop. Otherwise, click Enter."
-halt = STDIN.gets.chomp.downcase == 'halt'
-
-halt ? exit : OpeningAct.new(project_name, test_type).perform
+OpeningAct.new(project_name, test_type).perform
