@@ -1,5 +1,11 @@
 #!/usr/bin/env ruby
 require_relative '../lib/opening_act.rb'
+
 project_name, test_type, *rest = ARGV
+
+puts "> Running this command will initiate a git project."
+puts "> Make sure you are not running this command inside another git project."
+puts "> Press 'Enter' if you wish to continue."
+STDIN.gets
 
 OpeningAct.new(project_name, test_type).perform

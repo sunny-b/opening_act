@@ -1,5 +1,4 @@
 require_relative "opening_act/version"
-require 'pry'
 require 'fileutils'
 
 class OpeningAct
@@ -10,11 +9,11 @@ class OpeningAct
   end
 
   def perform
-    FileUtils.copy_entry PROJECT_TEMPLATE, name
-
+    check_if_directory_exists
     remove_files(test_or_spec == 'rspec' ? 'test' : 'spec');
     rename_template_files
-
+    initiate_git
+    curtain_call
   end
 
   private
@@ -25,6 +24,66 @@ class OpeningAct
 
   def test_or_spec
     @test_type
+  end
+
+  def check_if_directory_exists
+    if Dir.exists? name
+      output_directory_exists_commands
+      command = get_command_input
+
+      case command
+      when 'add'       then add_to_existing_dir
+      when 'overwrite' then overwrite_existing_dir
+      when 'rename'    then rename_project
+      when 'halt'      then leave_the_stage
+      end
+    else
+      create_template_files
+    end
+  end
+
+  def get_command_input
+    appropriate_commands = %w(add overwrite halt rename)
+
+    loop do
+      command = STDIN.gets.chomp.downcase
+      return command if appropriate_commands.include? command
+      puts '> Invalid entry. Please enter ADD/OVERWRITE/HALT/RENAME'
+    end
+  end
+
+  def output_directory_exists_commands
+    puts "> It appears another directory by this name already exists."
+    puts "> Do you wish to:"
+    puts "    ADD to it"
+    puts "    OVERWRITE it"
+    puts "    RENAME your project"
+    puts "    HALT this program"
+  end
+
+  def create_template_files
+    FileUtils.copy_entry PROJECT_TEMPLATE, name
+  end
+
+  def add_to_existing_dir
+    create_template_files
+
+    puts "> Files were added to existing directory '#{name}'."
+    puts
+  end
+
+  def overwrite_existing_dir
+    FileUtils.rm_rf("#{name}")
+    create_template_files
+
+    puts "> '#{name}' has been overwritten."
+    puts
+  end
+
+  def leave_the_stage
+    puts '> The Opening Act was forced to leave the stage early.'
+    puts '> Your project folder was not created.'
+    exit
   end
 
   def setup(project_name, test_type)
@@ -76,9 +135,22 @@ class OpeningAct
     end
   end
 
-  def encore
-    puts 'The Opening Act has performed.'
-    puts "Your project folder #{name} has be created."
-    puts "You're now ready for the main event."
+  def initiate_git
+    Dir.chdir "#{name}"
+    `git init`
+  end
+
+  def curtain_call
+    puts
+    puts '> The Opening Act has performed.'
+    puts "> Your project folder #{name} has be created."
+    puts "> You're now ready for the main event."
+  end
+
+  def rename_project
+    project_name = get_project_name
+    @name = project_name
+    puts "> Your project has been renamed to #{name}."
+    check_if_directory_exists
   end
 end

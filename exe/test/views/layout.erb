@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= @title || SiteConfig.title %></title>
+    <link href="/stylesheets/reset.css" rel="stylesheet" type="text/css"></link>
+    <link href="/stylesheets/main.css" rel="stylesheet" type="text/css"></link>
+  </head>
+  <body>
+
+    <%= yield %>
+
+    <script src="script.js"></script>
+  </body>
+</html>
