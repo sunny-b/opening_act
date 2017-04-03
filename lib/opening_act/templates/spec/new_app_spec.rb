@@ -12,5 +12,11 @@ describe 'main application' do
     expect(last_response).to be_ok
   end
 
+  it "does something useful" do
+    expect(false).to eq(true)
+  end
+
   it 'should have more specs'
+    expect(false).to eq(true)
+  end
 end
