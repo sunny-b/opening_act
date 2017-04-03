@@ -11,4 +11,6 @@ Sinatra::Base.set :run, false
 Sinatra::Base.set :raise_errors, true
 Sinatra::Base.set :logging, false
 
-require File.join(File.dirname(__FILE__), '../new_app')
+Dir.glob(File.expand_path("../*.rb", __FILE__)).each do |file|
+  require file
+end

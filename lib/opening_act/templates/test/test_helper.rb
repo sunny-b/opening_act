@@ -1,5 +1,7 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-require '../new_app'
+Dir.glob(File.expand_path("../*.rb", __FILE__)).each do |file|
+  require file
+end
 
 require 'minitest/autorun'
 require "minitest/reporters"
