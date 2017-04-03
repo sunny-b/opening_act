@@ -5,7 +5,7 @@ project_name, test_type, *rest = ARGV
 
 puts "> Running this command will initiate a git project."
 puts "> Make sure you are not running this command inside another git project."
-puts "> Press 'Enter' if you wish to continue."
-STDIN.gets
+puts "> Type HALT if you wish to stop. Otherwise, click Enter."
+halt = STDIN.gets.chomp.downcase == 'halt'
 
-OpeningAct.new(project_name, test_type).perform
+halt ? exit : OpeningAct.new(project_name, test_type).perform
