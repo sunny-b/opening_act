@@ -1,8 +1,8 @@
-require "bundler/setup"
+require 'bundler/setup'
 require 'sinatra'
 require 'tilt/erubis'
 require 'rack'
-require File.join(File.dirname(__FILE__), "environment")
+require File.join(File.dirname(__FILE__), 'environment')
 
 configure(:development) do
   require 'sinatra/reloader'
@@ -15,6 +15,6 @@ helpers do
 end
 
 # index page
-get "/" do
+get '/' do
   erb :index
 end
