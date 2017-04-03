@@ -18,12 +18,11 @@ class OpeningAct
 
   private
 
-  def name
-    @name
-  end
+  def add_to_existing_dir
+    create_template_files
 
-  def test_or_spec
-    @test_type
+    puts "> Files were added to existing directory '#{name}'."
+    puts
   end
 
   def check_if_directory_exists
@@ -42,6 +41,17 @@ class OpeningAct
     end
   end
 
+  def create_template_files
+    FileUtils.copy_entry PROJECT_TEMPLATE, name
+  end
+
+  def curtain_call
+    puts
+    puts '> The Opening Act has performed.'
+    puts "> Your project folder #{name} has be created."
+    puts "> You're now ready for the main event."
+  end
+
   def get_command_input
     appropriate_commands = %w(add overwrite halt rename)
 
@@ -50,48 +60,6 @@ class OpeningAct
       return command if appropriate_commands.include? command
       puts '> Invalid entry. Please enter ADD/OVERWRITE/HALT/RENAME'
     end
-  end
-
-  def output_directory_exists_commands
-    puts "> It appears another directory by this name already exists."
-    puts "> Do you wish to:"
-    puts "    ADD to it"
-    puts "    OVERWRITE it"
-    puts "    RENAME your project"
-    puts "    HALT this program"
-  end
-
-  def create_template_files
-    FileUtils.copy_entry PROJECT_TEMPLATE, name
-  end
-
-  def add_to_existing_dir
-    create_template_files
-
-    puts "> Files were added to existing directory '#{name}'."
-    puts
-  end
-
-  def overwrite_existing_dir
-    FileUtils.rm_rf("#{name}")
-    create_template_files
-
-    puts "> '#{name}' has been overwritten."
-    puts
-  end
-
-  def leave_the_stage
-    puts '> The Opening Act was forced to leave the stage early.'
-    puts '> Your project folder was not created.'
-    exit
-  end
-
-  def setup(project_name, test_type)
-    project_name = get_project_name unless valid_name?(project_name)
-    test_type = get_test_type unless valid_test?(test_type)
-
-    @name = project_name
-    @test_type = test_type[1..-1]
   end
 
   def get_project_name
@@ -115,17 +83,48 @@ class OpeningAct
     end
   end
 
-  def valid_test?(test_type)
-    !test_type.nil? && ['minitest', 'rspec'].include?(test_type[1..-1])
+  def initiate_git
+    Dir.chdir "#{name}"
+    `git init`
   end
 
-  def valid_name?(project_name)
-    !project_name.nil? && !(project_name[0] == '-')
+  def leave_the_stage
+    puts '> The Opening Act was forced to leave the stage early.'
+    puts '> Your project folder was not created.'
+    exit
+  end
+
+  def name
+    @name
+  end
+
+  def output_directory_exists_commands
+    puts "> It appears another directory by this name already exists."
+    puts "> Do you wish to:"
+    puts "    ADD to it"
+    puts "    OVERWRITE it"
+    puts "    RENAME your project"
+    puts "    HALT this program"
+  end
+
+  def overwrite_existing_dir
+    FileUtils.rm_rf("#{name}")
+    create_template_files
+
+    puts "> '#{name}' has been overwritten."
+    puts
   end
 
   def remove_files(test_type)
     FileUtils.rm_rf("#{name}/#{test_type}")
     FileUtils.rm Dir.glob("#{name}/*_#{test_type}")
+  end
+
+  def rename_project
+    project_name = get_project_name
+    @name = project_name
+    puts "> Your project has been renamed to #{name}."
+    check_if_directory_exists
   end
 
   def rename_template_files
@@ -135,22 +134,23 @@ class OpeningAct
     end
   end
 
-  def initiate_git
-    Dir.chdir "#{name}"
-    `git init`
-  end
+  def setup(project_name, test_type)
+    project_name = get_project_name unless valid_name?(project_name)
+    test_type = get_test_type unless valid_test?(test_type)
 
-  def curtain_call
-    puts
-    puts '> The Opening Act has performed.'
-    puts "> Your project folder #{name} has be created."
-    puts "> You're now ready for the main event."
-  end
-
-  def rename_project
-    project_name = get_project_name
     @name = project_name
-    puts "> Your project has been renamed to #{name}."
-    check_if_directory_exists
+    @test_type = test_type[1..-1]
+  end
+
+  def test_or_spec
+    @test_type
+  end
+
+  def valid_name?(project_name)
+    !project_name.nil? && !(project_name[0] == '-')
+  end
+
+  def valid_test?(test_type)
+    !test_type.nil? && ['minitest', 'rspec'].include?(test_type[1..-1])
   end
 end
