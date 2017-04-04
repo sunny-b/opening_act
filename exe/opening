@@ -3,4 +3,4 @@ require_relative '../lib/opening_act.rb'
 
 project_name, test_type, *rest = ARGV
 
-OpeningAct.new(project_name, test_type).perform
+OpeningAct.perform(project_name, test_type)
