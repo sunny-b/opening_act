@@ -30,7 +30,6 @@ class OpeningAct
       output_directory_exists_commands
       command = command_input
       determine_action(command)
-
     else
       create_template_files
     end
@@ -63,6 +62,7 @@ class OpeningAct
     when 'overwrite' then overwrite_existing_dir
     when 'rename'    then rename_project
     when 'halt'      then leave_the_stage
+    else 'no command'
     end
   end
 
@@ -80,6 +80,11 @@ class OpeningAct
   def self.name
     @@name
   end
+
+  def self.name=(new_name)
+    @@name = new_name
+  end
+
 
   def self.project_name_input
     loop do
@@ -122,8 +127,8 @@ class OpeningAct
   end
 
   def self.rename_project
-    project_name = project_name_input
-    @name = project_name
+    new_project_name = project_name_input
+    name = new_project_name
     puts "> Your project has been renamed to #{name}."
     check_if_directory_exists
   end

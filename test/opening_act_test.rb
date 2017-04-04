@@ -4,38 +4,103 @@ require 'fileutils'
 class OpeningActTest < Minitest::Test
   def setup
     $stdout = StringIO.new
-    $stdin = StringIO.new('\n')
   end
 
   def test_that_it_has_a_version_number
     refute_nil OpeningAct::VERSION
   end
 
-  def test_opening_act_setup_success
-    OpeningAct.perform('bubbles', '-minitest')
-    assert $stdout.string.match(/this command will initiate a git project./)
-    refute $stdout.string.match(/The Opening Act was forced to leave the stage early./)
-    refute $stdout.string.match(/The Opening Act has performed./)
-  end
-
-  def test_opening_act_setup_halt
+  def test_setup_halt
     $stdin = StringIO.new('halt')
-    OpeningAct.perform('bubbles', '-minitest')
+    OpeningAct.perform('', '')
     assert $stdout.string.match(/this command will initiate a git project./)
     assert $stdout.string.match(/The Opening Act was forced to leave the stage early./)
     refute $stdout.string.match(/The Opening Act has performed./)
   end
 
-  def test_opening_act_success_minitest
+  def test_success_minitest
+    $stdin = StringIO.new('\n')
     OpeningAct.perform('bubbles', '-minitest')
     assert $stdout.string.match(/this command will initiate a git project./)
     assert $stdout.string.match(/The Opening Act has performed./)
   end
 
-  def test_opening_act_success_rspec
+  def test_success_rspec
+    $stdin = StringIO.new('\n')
     OpeningAct.perform('bubbles', '-rspec')
     assert $stdout.string.match(/this command will initiate a git project./)
     assert $stdout.string.match(/The Opening Act has performed./)
+  end
+
+  def test_user_input
+    $stdin = StringIO.new('test')
+    assert_equal 'test', OpeningAct.send(:user_input)
+  end
+
+  def test_command_input_add
+    $stdin = StringIO.new('add')
+    assert_equal 'add', OpeningAct.send(:command_input)
+  end
+
+  def test_command_input_rename
+    $stdin = StringIO.new('rename')
+    assert_equal 'rename', OpeningAct.send(:command_input)
+  end
+
+  def test_command_input_halt
+    $stdin = StringIO.new('halt')
+    assert_equal 'halt', OpeningAct.send(:command_input)
+  end
+
+  def test_command_input_overwrite
+    $stdin = StringIO.new('overwrite')
+    assert_equal 'overwrite', OpeningAct.send(:command_input)
+  end
+
+  def test_output_commands
+    assert_nil OpeningAct.send(:output_directory_exists_commands)
+    assert $stdout.string.match(/It appears another directory by this name already exists./)
+    assert $stdout.string.match(/ADD to it/)
+    assert $stdout.string.match(/OVERWRITE it/)
+    assert $stdout.string.match(/RENAME your project/)
+    assert $stdout.string.match(/HALT this program/)
+  end
+
+  def test_determine_action_wrong_command
+    assert_equal 'no command', OpeningAct.send(:determine_action, nil)
+  end
+
+  def test_directory_already_exists_halt
+    $stdin = StringIO.new('\n')
+    OpeningAct.perform('bubbles', '-minitest')
+
+    $stdin = StringIO.new('halt')
+    OpeningAct.send(:check_if_directory_exists)
+
+    assert $stdout.string.match(/It appears another directory by this name already exists./)
+    assert $stdout.string.match(/The Opening Act was forced to leave the stage early./)
+  end
+
+  def test_directory_already_exists_add
+    $stdin = StringIO.new('\n')
+    OpeningAct.perform('bubbles', '-minitest')
+
+    $stdin = StringIO.new('add')
+    OpeningAct.send(:check_if_directory_exists)
+
+    assert $stdout.string.match(/It appears another directory by this name already exists./)
+    assert $stdout.string.match(/Files were added to existing directory 'bubbles'./)
+  end
+
+  def test_directory_already_exists_overwrite
+    $stdin = StringIO.new('\n')
+    OpeningAct.perform('bubbles', '-minitest')
+
+    $stdin = StringIO.new('overwrite')
+    OpeningAct.send(:check_if_directory_exists)
+
+    assert $stdout.string.match(/It appears another directory by this name already exists./)
+    assert $stdout.string.match(/'bubbles' has been overwritten./)
   end
 
   def teardown
