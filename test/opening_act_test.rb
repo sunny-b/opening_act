@@ -125,8 +125,6 @@ class OpeningActTest < Minitest::Test
 
   def test_rename_project_success
     OpeningAct.send(:setup, 'test', '-minitest')
-    assert_equal 'test', OpeningAct.send(:name)
-    assert_equal 'minitest', OpeningAct.send(:test_or_spec)
 
     $stdin = StringIO.new('bubbles')
     OpeningAct.send(:determine_action, 'rename')
@@ -135,6 +133,70 @@ class OpeningActTest < Minitest::Test
     assert $stdout.string.match(/What do you want to name your project?/)
     assert $stdout.string.match(/Your project has been renamed to 'bubbles'./)
     assert_equal 1, Dir.glob('bubbles').length
+  end
+
+  def test_setup
+    OpeningAct.send(:setup, 'test', '-minitest')
+    assert_equal 'test', OpeningAct.send(:name)
+    assert_equal 'minitest', OpeningAct.send(:test_or_spec)
+  end
+
+  def test_remove_files_bubbles_test
+    OpeningAct.send(:setup, 'bubbles', '-minitest')
+
+    OpeningAct.send(:check_if_directory_exists)
+    assert_equal 1, Dir.glob('bubbles').length
+    assert_equal 5, Dir.glob('bubbles/*_*').length
+
+    OpeningAct.send(:remove_files, 'spec')
+    assert_equal 1, Dir.glob('bubbles').length
+    assert_equal 3, Dir.glob('bubbles/*_*').length
+    assert_equal 1, Dir.glob('bubbles/test').length
+    assert_equal 1, Dir.glob('bubbles/Gemfile_test').length
+    assert_equal 1, Dir.glob('bubbles/Rakefile_test').length
+  end
+
+  def test_remove_files_bubbles_spec
+    OpeningAct.send(:setup, 'bubbles', '-rspec')
+
+    OpeningAct.send(:check_if_directory_exists)
+    assert_equal 1, Dir.glob('bubbles').length
+    assert_equal 5, Dir.glob('bubbles/*_*').length
+
+    OpeningAct.send(:remove_files, 'test')
+    assert_equal 1, Dir.glob('bubbles').length
+    assert_equal 3, Dir.glob('bubbles/*_*').length
+    assert_equal 1, Dir.glob('bubbles/spec').length
+    assert_equal 1, Dir.glob('bubbles/Gemfile_spec').length
+    assert_equal 1, Dir.glob('bubbles/Rakefile_spec').length
+  end
+
+  def test_rename_files_bubbles_spec
+    OpeningAct.send(:setup, 'bubbles', '-rspec')
+    OpeningAct.send(:check_if_directory_exists)
+    OpeningAct.send(:remove_files, 'test')
+
+    OpeningAct.send(:rename_template_files)
+    assert_equal 1, Dir.glob('bubbles').length
+    assert_equal 0, Dir.glob('bubbles/*_*').length
+    assert_equal 1, Dir.glob('bubbles/spec').length
+    assert_equal 1, Dir.glob('bubbles/Gemfile').length
+    assert_equal 1, Dir.glob('bubbles/Rakefile').length
+    assert_equal 1, Dir.glob('bubbles/bubbles.rb').length
+  end
+
+  def test_rename_files_bubbles_test
+    OpeningAct.send(:setup, 'bubbles', '-minitest')
+    OpeningAct.send(:check_if_directory_exists)
+    OpeningAct.send(:remove_files, 'spec')
+
+    OpeningAct.send(:rename_template_files)
+    assert_equal 1, Dir.glob('bubbles').length
+    assert_equal 0, Dir.glob('bubbles/*_*').length
+    assert_equal 1, Dir.glob('bubbles/test').length
+    assert_equal 1, Dir.glob('bubbles/Gemfile').length
+    assert_equal 1, Dir.glob('bubbles/Rakefile').length
+    assert_equal 1, Dir.glob('bubbles/bubbles.rb').length
   end
 
   def teardown
