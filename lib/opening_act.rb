@@ -56,7 +56,7 @@ class OpeningAct
   def self.curtain_call
     puts
     puts '> The Opening Act has performed.'
-    puts "> Your project folder #{name} was created."
+    puts "> Your project folder '#{name}' was created."
     puts "> You're now ready for the main event."
   end
 
@@ -89,10 +89,9 @@ class OpeningAct
     @@name
   end
 
-  def self.name=(new_name)
+  def self.rename_to(new_name)
     @@name = new_name
   end
-
 
   def self.project_name_input
     loop do
@@ -135,8 +134,8 @@ class OpeningAct
   end
 
   def self.rename_project
-    name = project_name_input
-    puts "> Your project has been renamed to #{name}."
+    rename_to(project_name_input)
+    puts "> Your project has been renamed to '#{name}'."
     name
   end
 

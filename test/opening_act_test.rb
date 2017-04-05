@@ -23,6 +23,10 @@ class OpeningActTest < Minitest::Test
     OpeningAct.perform('bubbles', '-minitest')
     assert $stdout.string.match(/this command will initiate a git project./)
     assert $stdout.string.match(/The Opening Act has performed./)
+    assert_equal 1, Dir.glob('bubbles').length
+    assert_equal 1, Dir.glob('bubbles/test').length
+    assert_equal 1, Dir.glob('bubbles/Gemfile').length
+    assert_equal 1, Dir.glob('bubbles/Rakefile').length
   end
 
   def test_success_rspec
@@ -30,6 +34,10 @@ class OpeningActTest < Minitest::Test
     OpeningAct.perform('bubbles', '-rspec')
     assert $stdout.string.match(/this command will initiate a git project./)
     assert $stdout.string.match(/The Opening Act has performed./)
+    assert_equal 1, Dir.glob('bubbles').length
+    assert_equal 1, Dir.glob('bubbles/spec').length
+    assert_equal 1, Dir.glob('bubbles/Gemfile').length
+    assert_equal 1, Dir.glob('bubbles/Rakefile').length
   end
 
   def test_user_input
@@ -103,15 +111,30 @@ class OpeningActTest < Minitest::Test
     assert $stdout.string.match(/'bubbles' has been overwritten./)
   end
 
-  def test_directory_already_exists_overwrite
-    $stdin = StringIO.new('\n')
-    OpeningAct.perform('bubbles', '-minitest')
+  def test_rename_project_to_bubbles
+    assert_equal 'test', OpeningAct.send(:rename_to, 'test')
+    assert_equal 'test', OpeningAct.send(:name)
 
-    $stdin = StringIO.new('overwrite')
-    OpeningAct.send(:check_if_directory_exists)
+    $stdin = StringIO.new('bubbles')
+    assert_equal 'bubbles', OpeningAct.send(:rename_project)
+    assert_equal 'bubbles', OpeningAct.send(:name)
 
-    assert $stdout.string.match(/It appears another directory by this name already exists./)
-    assert $stdout.string.match(/'bubbles' has been overwritten./)
+    assert $stdout.string.match(/What do you want to name your project?/)
+    assert $stdout.string.match(/Your project has been renamed to 'bubbles'./)
+  end
+
+  def test_rename_project_success
+    OpeningAct.send(:setup, 'test', '-minitest')
+    assert_equal 'test', OpeningAct.send(:name)
+    assert_equal 'minitest', OpeningAct.send(:test_or_spec)
+
+    $stdin = StringIO.new('bubbles')
+    OpeningAct.send(:determine_action, 'rename')
+    assert_equal 'bubbles', OpeningAct.send(:name)
+
+    assert $stdout.string.match(/What do you want to name your project?/)
+    assert $stdout.string.match(/Your project has been renamed to 'bubbles'./)
+    assert_equal 1, Dir.glob('bubbles').length
   end
 
   def teardown
