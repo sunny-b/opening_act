@@ -45,6 +45,10 @@ class OpeningAct
     end
   end
 
+  def self.correct_test_name?(test_type)
+    %w[minitest rspec].include?(test_type[1..-1])
+  end
+
   def self.create_template_files
     FileUtils.copy_entry PROJECT_TEMPLATE, name
   end
@@ -64,6 +68,10 @@ class OpeningAct
     when 'halt'      then leave_the_stage
     else 'no command'
     end
+  end
+
+  def self.flag?(test_type)
+    test_type[0] == '-'
   end
 
   def self.initiate_git
@@ -129,7 +137,9 @@ class OpeningAct
   def self.rename_project
     new_project_name = project_name_input
     name = new_project_name
+
     puts "> Your project has been renamed to #{name}."
+
     check_if_directory_exists
   end
 
@@ -167,11 +177,22 @@ class OpeningAct
     $stdin.gets.chomp
   end
 
+  def self.valid_characters?(project_name)
+    !!/[^\#%&{}\\<>*?\/ $!'":@+`|=]/.match(project_name)
+  end
+
+  def self.valid_initial_character?(project_name)
+    !!/[^ .\-_]/.match(project_name[0])
+  end
+
   def self.valid_name?(project_name)
-    !project_name.nil? && project_name[0] != '-'
+                        !project_name.nil? &&
+           valid_characters?(project_name) &&
+    valid_initial_character?(project_name) &&
+                  project_name.length < 31
   end
 
   def self.valid_test?(test_type)
-    !test_type.nil? && %w[minitest rspec].include?(test_type[1..-1])
+    !test_type.nil? && correct_test_name?(test_type) && flag?(test_type)
   end
 end

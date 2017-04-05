@@ -103,6 +103,17 @@ class OpeningActTest < Minitest::Test
     assert $stdout.string.match(/'bubbles' has been overwritten./)
   end
 
+  def test_directory_already_exists_overwrite
+    $stdin = StringIO.new('\n')
+    OpeningAct.perform('bubbles', '-minitest')
+
+    $stdin = StringIO.new('overwrite')
+    OpeningAct.send(:check_if_directory_exists)
+
+    assert $stdout.string.match(/It appears another directory by this name already exists./)
+    assert $stdout.string.match(/'bubbles' has been overwritten./)
+  end
+
   def teardown
     FileUtils.rm_rf('bubbles')
     $stdout = STDOUT
