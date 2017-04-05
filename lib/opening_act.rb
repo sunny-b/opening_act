@@ -64,7 +64,7 @@ class OpeningAct
     case command
     when 'add'       then add_to_existing_dir
     when 'overwrite' then overwrite_existing_dir
-    when 'rename'    then rename_project
+    when 'rename'    then rename_project && check_if_directory_exists
     when 'halt'      then leave_the_stage
     else 'no command'
     end
@@ -135,12 +135,9 @@ class OpeningAct
   end
 
   def self.rename_project
-    new_project_name = project_name_input
-    name = new_project_name
-
+    name = project_name_input
     puts "> Your project has been renamed to #{name}."
-
-    check_if_directory_exists
+    name
   end
 
   def self.rename_template_files
