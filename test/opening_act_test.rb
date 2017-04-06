@@ -175,8 +175,8 @@ class OpeningActTest < Minitest::Test
     OpeningAct.send(:setup, 'bubbles', '-rspec')
     OpeningAct.send(:create_template_files)
     OpeningAct.send(:remove_files, 'test')
-
     OpeningAct.send(:rename_template_files)
+
     assert_equal 1, Dir.glob('bubbles').length
     assert_equal 0, Dir.glob('bubbles/*_*').length
     assert_equal 1, Dir.glob('bubbles/spec').length
@@ -189,8 +189,8 @@ class OpeningActTest < Minitest::Test
     OpeningAct.send(:setup, 'bubbles', '-minitest')
     OpeningAct.send(:create_template_files)
     OpeningAct.send(:remove_files, 'spec')
-
     OpeningAct.send(:rename_template_files)
+    
     assert_equal 1, Dir.glob('bubbles').length
     assert_equal 0, Dir.glob('bubbles/*_*').length
     assert_equal 1, Dir.glob('bubbles/test').length
@@ -216,7 +216,8 @@ class OpeningActTest < Minitest::Test
   end
 
   def test_valid_project_name_fail_too_long
-    assert_equal false, OpeningAct.send(:valid_name?, 'bubblesbubblesbubblesbubblesbubblesbubblesbubbles')
+    assert_equal false,
+    OpeningAct.send(:valid_name?, 'bubblesbubblesbubblesbubblesbubblesbubblesbubbles')
   end
 
   def test_valid_test_success_minitest
