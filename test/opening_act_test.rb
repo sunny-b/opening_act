@@ -190,7 +190,7 @@ class OpeningActTest < Minitest::Test
     OpeningAct.send(:create_template_files)
     OpeningAct.send(:remove_files, 'spec')
     OpeningAct.send(:rename_template_files)
-    
+
     assert_equal 1, Dir.glob('bubbles').length
     assert_equal 0, Dir.glob('bubbles/*_*').length
     assert_equal 1, Dir.glob('bubbles/test').length

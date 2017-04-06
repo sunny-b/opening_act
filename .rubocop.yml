@@ -1,3 +1,5 @@
 # Inherit style from another configuration
 inherit_from: .rubocop_todo.yml
 
+Style/TrailingWhitespace:
+  Enabled: true
