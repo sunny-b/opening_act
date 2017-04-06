@@ -180,6 +180,7 @@ class OpeningActTest < Minitest::Test
     assert_equal 1, Dir.glob('bubbles').length
     assert_equal 0, Dir.glob('bubbles/*_*').length
     assert_equal 1, Dir.glob('bubbles/spec').length
+    assert_equal 1, Dir.glob('bubbles/spec/bubbles_spec.rb').length
     assert_equal 1, Dir.glob('bubbles/Gemfile').length
     assert_equal 1, Dir.glob('bubbles/Rakefile').length
     assert_equal 1, Dir.glob('bubbles/bubbles.rb').length
@@ -194,6 +195,7 @@ class OpeningActTest < Minitest::Test
     assert_equal 1, Dir.glob('bubbles').length
     assert_equal 0, Dir.glob('bubbles/*_*').length
     assert_equal 1, Dir.glob('bubbles/test').length
+    assert_equal 1, Dir.glob('bubbles/test/bubbles_test.rb').length
     assert_equal 1, Dir.glob('bubbles/Gemfile').length
     assert_equal 1, Dir.glob('bubbles/Rakefile').length
     assert_equal 1, Dir.glob('bubbles/bubbles.rb').length
