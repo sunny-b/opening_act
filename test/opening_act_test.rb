@@ -141,14 +141,14 @@ class OpeningActTest < Minitest::Test
     assert_equal 'minitest', OpeningAct.send(:test_or_spec)
   end
 
-  def test_remove_files_bubbles_test
+  def test_remove_extra_test_files_bubbles_test
     OpeningAct.send(:setup, 'bubbles', '-minitest')
 
     OpeningAct.send(:create_template_files)
     assert_equal 1, Dir.glob('bubbles').length
     assert_equal 5, Dir.glob('bubbles/*_*').length
 
-    OpeningAct.send(:remove_files, 'spec')
+    OpeningAct.send(:remove_extra_test_files, 'spec')
     assert_equal 1, Dir.glob('bubbles').length
     assert_equal 3, Dir.glob('bubbles/*_*').length
     assert_equal 1, Dir.glob('bubbles/test').length
@@ -156,14 +156,14 @@ class OpeningActTest < Minitest::Test
     assert_equal 1, Dir.glob('bubbles/Rakefile_test').length
   end
 
-  def test_remove_files_bubbles_spec
+  def test_remove_extra_test_files_bubbles_spec
     OpeningAct.send(:setup, 'bubbles', '-rspec')
 
     OpeningAct.send(:create_template_files)
     assert_equal 1, Dir.glob('bubbles').length
     assert_equal 5, Dir.glob('bubbles/*_*').length
 
-    OpeningAct.send(:remove_files, 'test')
+    OpeningAct.send(:remove_extra_test_files, 'test')
     assert_equal 1, Dir.glob('bubbles').length
     assert_equal 3, Dir.glob('bubbles/*_*').length
     assert_equal 1, Dir.glob('bubbles/spec').length
@@ -174,7 +174,7 @@ class OpeningActTest < Minitest::Test
   def test_rename_files_bubbles_spec
     OpeningAct.send(:setup, 'bubbles', '-rspec')
     OpeningAct.send(:create_template_files)
-    OpeningAct.send(:remove_files, 'test')
+    OpeningAct.send(:remove_extra_test_files, 'test')
     OpeningAct.send(:rename_template_files)
 
     assert_equal 1, Dir.glob('bubbles').length
@@ -188,7 +188,7 @@ class OpeningActTest < Minitest::Test
   def test_rename_files_bubbles_test
     OpeningAct.send(:setup, 'bubbles', '-minitest')
     OpeningAct.send(:create_template_files)
-    OpeningAct.send(:remove_files, 'spec')
+    OpeningAct.send(:remove_extra_test_files, 'spec')
     OpeningAct.send(:rename_template_files)
 
     assert_equal 1, Dir.glob('bubbles').length

@@ -11,7 +11,7 @@ class OpeningAct
     setup(name, test_name)
     add_overwrite_rename_or_quit while directory_exists?
     create_template_files
-    remove_files(test_or_spec == 'rspec' ? 'test' : 'spec')
+    remove_extra_test_files(test_or_spec == 'rspec' ? 'test' : 'spec')
     rename_template_files
     initiate_git
     curtain_call
@@ -129,9 +129,15 @@ class OpeningAct
     !%w[quit q].include?(user_input.downcase)
   end
 
-  def self.remove_files(test_type)
+  def self.remove_extra_test_files(test_type)
     FileUtils.rm_rf("#{name}/#{test_type}")
     FileUtils.rm Dir.glob("#{name}/*_#{test_type}")
+  end
+
+  def self.remove_test_suffix
+    Dir.glob("#{name}/*_*").each do |file|
+      File.rename(file, file[0..-6])
+    end
   end
 
   def self.rename_project
@@ -147,12 +153,10 @@ class OpeningAct
     when 'minitest'
       File.rename("#{name}/test/new_app_test.rb", "#{name}/test/#{name}_test.rb")
     when 'rspec'
-      File.rename("#{name}/spec/new_app_test.rb", "#{name}/spec/#{name}_spec.rb")
+      File.rename("#{name}/spec/new_app_spec.rb", "#{name}/spec/#{name}_spec.rb")
     end
 
-    Dir.glob("#{name}/*_*").each do |file|
-      File.rename(file, file[0..-6])
-    end
+    remove_test_suffix
   end
 
   def self.setup(project_name, test_type)
