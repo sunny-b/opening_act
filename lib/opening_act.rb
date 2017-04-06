@@ -9,7 +9,8 @@ class OpeningAct
     return leave_the_stage unless play_on?
 
     setup(name, test_name)
-    check_if_directory_exists
+    add_overwrite_rename_or_quit while directory_exists?
+    create_template_files
     remove_files(test_or_spec == 'rspec' ? 'test' : 'spec')
     rename_template_files
     initiate_git
@@ -18,6 +19,12 @@ class OpeningAct
 
   private_class_method
 
+  def self.add_overwrite_rename_or_quit
+      output_directory_exists_commands
+      command = command_input
+      determine_action(command)
+  end
+
   def self.add_to_existing_dir
     create_template_files
 
@@ -25,23 +32,13 @@ class OpeningAct
     puts
   end
 
-  def self.check_if_directory_exists
-    if Dir.exist? name
-      output_directory_exists_commands
-      command = command_input
-      determine_action(command)
-    else
-      create_template_files
-    end
-  end
-
   def self.command_input
-    appropriate_commands = %w[add overwrite halt rename]
+    appropriate_commands = %w[add overwrite q quit rename]
 
     loop do
       command = user_input.downcase
       return command if appropriate_commands.include? command
-      puts '> Invalid entry. Please enter ADD/OVERWRITE/HALT/RENAME'
+      puts '> Invalid entry. Please enter ADD/OVERWRITE/QUIT/RENAME'
     end
   end
 
@@ -62,12 +59,16 @@ class OpeningAct
 
   def self.determine_action(command)
     case command
-    when 'add'       then add_to_existing_dir
-    when 'overwrite' then overwrite_existing_dir
-    when 'rename'    then rename_project && check_if_directory_exists
-    when 'halt'      then leave_the_stage
+    when 'add'              then add_to_existing_dir
+    when 'overwrite'        then overwrite_existing_dir
+    when 'rename'           then rename_project
+    when 'quit' || 'q'      then leave_the_stage
     else 'no command'
     end
+  end
+
+  def self.directory_exists?
+    Dir.exist? name
   end
 
   def self.flag?(test_type)
@@ -98,8 +99,8 @@ class OpeningAct
       puts '> What do you want to name your project?'
       project_name = user_input
 
-      return project_name unless project_name.empty?
-      puts 'Invalid entry.'
+      return project_name if valid_name?(project_name)
+      puts '> Invalid characters. Please try again'
     end
   end
 
@@ -109,7 +110,7 @@ class OpeningAct
     puts '    ADD to it'
     puts '    OVERWRITE it'
     puts '    RENAME your project'
-    puts '    HALT this program'
+    puts '    QUIT this program'
   end
 
   def self.overwrite_existing_dir
@@ -123,9 +124,9 @@ class OpeningAct
   def self.play_on?
     puts '> Running this command will initiate a git project.'
     puts "> Make sure you aren't running this inside another git project."
-    puts '> Type HALT if you wish to stop. Otherwise, click Enter.'
+    puts '> Type QUIT if you wish to stop. Otherwise, click Enter.'
 
-    !user_input.casecmp('halt').zero?
+    !%w(quit q).include?(user_input.downcase)
   end
 
   def self.remove_files(test_type)
@@ -159,13 +160,13 @@ class OpeningAct
   end
 
   def self.test_type_input
-    tests = %w[minitest rspec]
+    valid_tests = %w[minitest rspec]
     loop do
       puts '> Do you prefer rspec or minitest?'
-      test_type = user_input
+      test_type = user_input.downcase
 
-      return test_type if tests.include? test_type
-      puts 'Invalid entry.'
+      return test_type if valid_tests.include? test_type
+      puts '> Invalid entry.'
     end
   end
 
@@ -174,11 +175,11 @@ class OpeningAct
   end
 
   def self.valid_characters?(project_name)
-    !!/[^\#%&{}\\<>*?\/ $!'":@+`|=]/.match(project_name)
+    !/[\#%&{}\\<>*?\/ $!'":@+`|=]/.match(project_name)
   end
 
   def self.valid_initial_character?(project_name)
-    !!/[^ .\-_]/.match(project_name[0])
+    !/[ .\-_]/.match(project_name[0])
   end
 
   def self.valid_name?(project_name)
