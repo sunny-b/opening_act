@@ -142,6 +142,14 @@ class OpeningAct
 
   def self.rename_template_files
     File.rename("#{name}/new_app.rb", "#{name}/#{name}.rb")
+
+    case (test_or_spec)
+    when 'minitest'
+      File.rename("#{name}/test/new_app_test.rb", "#{name}/test/#{name}_test.rb")
+    when 'rspec'
+      File.rename("#{name}/spec/new_app_test.rb", "#{name}/spec/#{name}_spec.rb")
+    end
+
     Dir.glob("#{name}/*_*").each do |file|
       File.rename(file, file[0..-6])
     end
