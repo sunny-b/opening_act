@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 require_relative '../lib/opening_act.rb'
 
-project_name, test_type, *rest = ARGV
+project_name, test_type = ARGV
 
 OpeningAct.perform(project_name, test_type)

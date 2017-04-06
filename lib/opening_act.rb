@@ -20,9 +20,9 @@ class OpeningAct
   private_class_method
 
   def self.add_overwrite_rename_or_quit
-      output_directory_exists_commands
-      command = command_input
-      determine_action(command)
+    output_directory_exists_commands
+    command = command_input
+    determine_action(command)
   end
 
   def self.add_to_existing_dir
@@ -126,7 +126,7 @@ class OpeningAct
     puts "> Make sure you aren't running this inside another git project."
     puts '> Type QUIT if you wish to stop. Otherwise, click Enter.'
 
-    !%w(quit q).include?(user_input.downcase)
+    !%w[quit q].include?(user_input.downcase)
   end
 
   def self.remove_files(test_type)
@@ -175,7 +175,7 @@ class OpeningAct
   end
 
   def self.valid_characters?(project_name)
-    !/[\#%&{}\\<>*?\/ $!'":@+`|=]/.match(project_name)
+    !%r{[\#%&{}\\<>*?\/ $!'":@+`|=]}.match(project_name)
   end
 
   def self.valid_initial_character?(project_name)
@@ -183,10 +183,10 @@ class OpeningAct
   end
 
   def self.valid_name?(project_name)
-                        !project_name.nil? &&
-           valid_characters?(project_name) &&
-    valid_initial_character?(project_name) &&
-                  project_name.length < 31
+    !project_name.nil? &&
+      valid_characters?(project_name) &&
+      valid_initial_character?(project_name) &&
+      project_name.length < 31
   end
 
   def self.valid_test?(test_type)

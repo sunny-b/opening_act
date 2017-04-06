@@ -1,6 +1,7 @@
 require 'test_helper'
 require 'fileutils'
 
+# Tests for main class OpeningAct
 class OpeningActTest < Minitest::Test
   def setup
     $stdout = StringIO.new
@@ -206,20 +207,8 @@ class OpeningActTest < Minitest::Test
     assert_equal false, OpeningAct.send(:valid_name?, nil)
   end
 
-  def test_valid_project_name_fail_invalid_character
-    assert_equal false, OpeningAct.send(:valid_name?, '<bubbles>')
-  end
-
   def test_valid_project_name_fail_invalid_initial_character
     assert_equal false, OpeningAct.send(:valid_name?, '-bubbles')
-  end
-
-  def test_valid_project_name_success
-    assert_equal true, OpeningAct.send(:valid_name?, 'bubbles')
-  end
-
-  def test_valid_project_name_fail_nil
-    assert_equal false, OpeningAct.send(:valid_name?, nil)
   end
 
   def test_valid_project_name_fail_invalid_character
