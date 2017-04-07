@@ -13,7 +13,7 @@ class OpeningAct
     create_template_files
     remove_extra_test_files(test_or_spec == 'rspec' ? 'test' : 'spec')
     rename_template_files
-    initiate_git
+    initiate_project
     curtain_call
   end
 
@@ -75,9 +75,10 @@ class OpeningAct
     test_type[0] == '-'
   end
 
-  def self.initiate_git
+  def self.initiate_project
     Dir.chdir name.to_s do
       `git init`
+      `bundle install`
     end
   end
 

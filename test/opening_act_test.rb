@@ -22,11 +22,14 @@ class OpeningActTest < Minitest::Test
   def test_success_minitest
     $stdin = StringIO.new('\n')
     OpeningAct.perform('bubbles', '-minitest')
+
     assert $stdout.string.match(/this command will initiate a git project./)
     assert $stdout.string.match(/The Opening Act has performed./)
+
     assert_equal 1, Dir.glob('bubbles').length
     assert_equal 1, Dir.glob('bubbles/test').length
     assert_equal 1, Dir.glob('bubbles/Gemfile').length
+    assert_equal 1, Dir.glob('bubbles/.git').length
     assert_equal 1, Dir.glob('bubbles/Rakefile').length
   end
 
@@ -39,6 +42,7 @@ class OpeningActTest < Minitest::Test
     assert_equal 1, Dir.glob('bubbles/spec').length
     assert_equal 1, Dir.glob('bubbles/Gemfile').length
     assert_equal 1, Dir.glob('bubbles/Rakefile').length
+    assert_equal 1, Dir.glob('bubbles/.git').length
   end
 
   def test_user_input
