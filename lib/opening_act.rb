@@ -10,6 +10,7 @@ class OpeningAct
 
     setup(name, test_name)
     add_overwrite_rename_or_quit while directory_exists?
+    take_the_stage
     create_template_files
     remove_extra_test_files(test_or_spec == 'rspec' ? 'test' : 'spec')
     rename_template_files
@@ -166,6 +167,10 @@ class OpeningAct
 
     @@name = project_name
     @@test_type = test_type[1..-1]
+  end
+
+  def self.take_the_stage
+    puts '> The Opening Act has begun to play. This may take a moment.'
   end
 
   def self.test_or_spec
