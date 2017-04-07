@@ -1,6 +1,8 @@
 # OpeningAct
 
+Do you use Sinatra often? Are you tired of creating the same boilerplate files every time and haven't had the time to automate your system yet? Well then this is the gem for you. OpeningAct creates the template files you need for your Sinatra application so you can start developing in moments.
 
+OpeningAct was inspired by Bundler's gem template and Rails. Also
 
 ## Installation
 
