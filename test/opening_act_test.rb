@@ -45,6 +45,35 @@ class OpeningActTest < Minitest::Test
     assert_equal 1, Dir.glob('bubbles/.git').length
   end
 
+  def test_success_reverse_argument_order
+    $stdin = StringIO.new('\n\n')
+    `ruby exe/opening bubbles -minitest`
+
+    assert $stdout.string.match(/this command will initiate a git project./)
+    assert $stdout.string.match(/The Opening Act has performed./)
+    assert_equal 1, Dir.glob('bubbles').length
+    assert_equal 1, Dir.glob('bubbles/test').length
+    assert_equal 1, Dir.glob('bubbles/Gemfile').length
+    assert_equal 1, Dir.glob('bubbles/Rakefile').length
+    assert_equal 1, Dir.glob('bubbles/.git').length
+  end
+
+  def test_missing_project_name
+    $stdin = StringIO.new('bubbles')
+    OpeningAct.send(:setup, nil, '-minitest')
+
+    assert $stdout.string.match(/What do you want to name your project?/)
+    assert_equal 'bubbles', OpeningAct.send(:name)
+  end
+
+  def test_missing_test_type
+    $stdin = StringIO.new('minitest')
+    OpeningAct.send(:setup, 'bubbles', nil)
+
+    assert $stdout.string.match(/Do you prefer rspec or minitest?/)
+    assert_equal 'minitest', OpeningAct.send(:test_or_spec)
+  end
+
   def test_user_input
     $stdin = StringIO.new('test1')
     assert_equal 'test1', OpeningAct.send(:user_input)
@@ -248,12 +277,12 @@ class OpeningActTest < Minitest::Test
 
   def test_test_type_input_rspec
     $stdin = StringIO.new('rspec')
-    assert_equal 'rspec', OpeningAct.send(:test_type_input)
+    assert_equal '-rspec', OpeningAct.send(:test_type_input)
   end
 
   def test_test_type_input_minitest
     $stdin = StringIO.new('minitest')
-    assert_equal 'minitest', OpeningAct.send(:test_type_input)
+    assert_equal '-minitest', OpeningAct.send(:test_type_input)
   end
 
   def teardown

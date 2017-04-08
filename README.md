@@ -2,27 +2,25 @@
 
 Do you use Sinatra often? Are you tired of creating the same boilerplate files every time and haven't had the time to automate your system yet? Well then this is the gem for you. OpeningAct creates the template files you need for your Sinatra application so you can start developing in moments.
 
-OpeningAct was inspired by Bundler's gem template and Rails. Also
+OpeningAct was inspired by Bundler's gem template and Rails. The template files were partially inspired by [zapnap's sinatra template](https://github.com/zapnap/sinatra-template).
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'opening_act'
-```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
+To install OpeningAct, you just need to run this command on your machine:
 
     $ gem install opening_act
 
 ## Usage
 
-TODO: Write usage instructions here
+Once you install OpeningAct on your machine, you will have access to the executable `opening`. To create your sinatra template, just run it on your command line:
+
+    $ opening
+
+OpeningAct will prompt you to provide a name for your project and your preferred test framework (Rspec or Minitest).
+
+You can also pass in 
+
+
 
 ## Development
 
@@ -32,7 +30,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/opening_act.
+Bug reports and pull requests are welcome on GitHub at https://github.com/sunny-b/opening_act.
 
 
 ## License

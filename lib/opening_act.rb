@@ -178,12 +178,11 @@ class OpeningAct
   end
 
   def self.test_type_input
-    valid_tests = %w[minitest rspec]
     loop do
       puts '> Do you prefer rspec or minitest?'
-      test_type = user_input.downcase
+      test_type = '-' + user_input.downcase
 
-      return test_type if valid_tests.include? test_type
+      return test_type if valid_test? test_type
       puts '> Invalid entry.'
     end
   end
