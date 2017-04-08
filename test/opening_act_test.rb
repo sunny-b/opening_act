@@ -45,19 +45,6 @@ class OpeningActTest < Minitest::Test
     assert_equal 1, Dir.glob('bubbles/.git').length
   end
 
-  def test_success_reverse_argument_order
-    $stdin = StringIO.new('\n\n')
-    `ruby exe/opening bubbles -minitest`
-
-    assert $stdout.string.match(/this command will initiate a git project./)
-    assert $stdout.string.match(/The Opening Act has performed./)
-    assert_equal 1, Dir.glob('bubbles').length
-    assert_equal 1, Dir.glob('bubbles/test').length
-    assert_equal 1, Dir.glob('bubbles/Gemfile').length
-    assert_equal 1, Dir.glob('bubbles/Rakefile').length
-    assert_equal 1, Dir.glob('bubbles/.git').length
-  end
-
   def test_missing_project_name
     $stdin = StringIO.new('bubbles')
     OpeningAct.send(:setup, nil, '-minitest')
