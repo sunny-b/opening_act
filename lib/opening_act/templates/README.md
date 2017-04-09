@@ -16,10 +16,9 @@ All your tests are housed in either the `test` or `spec` folders, depending on t
 
 Some failing tests have been created for you. To run the tests:
 
-```
-bundle exec rake test
+
+`bundle exec rake test`
 
 OR
 
-bundle exec rake spec
-```
+`bundle exec rake spec`
