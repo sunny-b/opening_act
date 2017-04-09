@@ -8,7 +8,6 @@ require File.join(File.dirname(__FILE__), 'environment')
 configure(:development) do
   require 'sinatra/reloader'
   require 'pry'
-  also_reload 'lib/sequel_persistence.rb' if development?
 end
 
 helpers do
