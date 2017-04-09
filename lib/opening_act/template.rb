@@ -1,3 +1,4 @@
+# Class for template and boilerplate files
 class Template
   attr_reader :test_type
   attr_accessor :name
@@ -23,7 +24,7 @@ class Template
   def rename_files
     File.rename("#{name}/new_app.rb", "#{name}/#{name}.rb")
 
-    case (test_type)
+    case test_type
     when 'minitest'
       File.rename("#{name}/test/new_app_test.rb", "#{name}/test/#{name}_test.rb")
     when 'rspec'

@@ -1,3 +1,4 @@
+# Module that contains validating methods for project name and test type
 module Verifiable
   def valid_characters?(project_name)
     !%r{[\#%&{}\\<>*?\/ $!'":@+`|=]}.match(project_name)

@@ -1,3 +1,4 @@
+# Module containing method for user inputs
 module Inputable
   def command_input
     appropriate_commands = %w[add overwrite q quit rename]

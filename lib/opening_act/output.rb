@@ -1,3 +1,4 @@
+# Module containing methods that only output text
 module Outputable
   def curtain_call
     puts
@@ -11,7 +12,7 @@ module Outputable
     puts '> Your project folder was not created.'
   end
 
-  def output_directory_exists_commands
+  def directory_exists_commands
     puts '> It appears another directory by this name already exists.'
     puts '> Do you wish to:'
     puts '    ADD to it'
@@ -22,5 +23,25 @@ module Outputable
 
   def take_the_stage
     puts '> The Opening Act has begun to play. This may take a moment.'
+  end
+
+  def add_confirmation
+    puts "> Files will be added to existing directory '#{template.name}'."
+    puts
+  end
+
+  def overwrite_confirmation
+    puts "> '#{template.name}' will be overwritten."
+    puts
+  end
+
+  def rename_confirmation
+    puts "> Your project has been renamed to '#{template.name}'."
+  end
+
+  def new_git_confirmation
+    puts '> Running this command will initiate a git project.'
+    puts "> Make sure you aren't running this inside another git project."
+    puts '> Type QUIT if you wish to stop. Otherwise, click Enter.'
   end
 end

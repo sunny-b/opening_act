@@ -87,7 +87,7 @@ class OpeningActTest < Minitest::Test
   end
 
   def test_output_commands
-    assert_nil OpeningAct.send(:output_directory_exists_commands)
+    assert_nil OpeningAct.send(:directory_exists_commands)
     assert $stdout.string.match(/It appears another directory by this name already exists./)
     assert $stdout.string.match(/ADD to it/)
     assert $stdout.string.match(/OVERWRITE it/)
@@ -239,7 +239,7 @@ class OpeningActTest < Minitest::Test
 
   def test_valid_project_name_fail_too_long
     assert_equal false,
-    OpeningAct.send(:valid_name?, 'bubblesbubblesbubblesbubblesbubblesbubblesbubbles')
+                 OpeningAct.send(:valid_name?, 'bubblesbubblesbubblesbubblesbubblesbubblesbubbles')
   end
 
   def test_valid_test_success_minitest

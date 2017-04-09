@@ -1,10 +1,15 @@
 #!/usr/bin/env ruby
 require_relative '../lib/opening_act.rb'
 
-def flag?(item); item[0] == '-' end
-def is_test?(item); item.match(/(minitest|rspec)/) end
+def flag?(item)
+  item[0] == '-'
+end
 
-test_type = ARGV.find { |item| flag?(item) && is_test?(item) }
+def test?(item)
+  item.match(/(minitest|rspec)/)
+end
+
+test_type = ARGV.find { |item| flag?(item) && test?(item) }
 project_name = ARGV.reject { |item| flag?(item) }.first
 
 OpeningAct.perform(project_name, test_type)
