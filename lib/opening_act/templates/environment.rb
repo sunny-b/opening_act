@@ -1,5 +1,7 @@
 require 'rubygems'
 require 'bundler/setup'
+require 'tilt/erubis'
+require 'date'
 require 'sinatra' unless defined?(Sinatra)
 
 configure do
