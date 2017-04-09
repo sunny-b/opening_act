@@ -12,18 +12,18 @@ class OpeningActTest < Minitest::Test
   end
 
   def test_setup_quit
-    $stdin = StringIO.new('quit')
+    $stdin = StringIO.new('\n')
     OpeningAct.perform('', '')
-    assert $stdout.string.match(/this command will initiate a git project./)
+    assert $stdout.string.match(/A git project already exists in this directory./)
     assert $stdout.string.match(/The Opening Act was forced to leave the stage early./)
     refute $stdout.string.match(/The Opening Act has performed./)
   end
 
   def test_success_minitest
-    $stdin = StringIO.new('\n')
+    $stdin = StringIO.new('continue')
     OpeningAct.perform('bubbles', '-minitest')
 
-    assert $stdout.string.match(/this command will initiate a git project./)
+    assert $stdout.string.match(/The Opening Act has begun to perform./)
     assert $stdout.string.match(/The Opening Act has performed./)
 
     assert_equal 1, Dir.glob('bubbles').length
@@ -35,9 +35,9 @@ class OpeningActTest < Minitest::Test
   end
 
   def test_success_rspec
-    $stdin = StringIO.new('\n')
+    $stdin = StringIO.new('continue')
     OpeningAct.perform('bubbles', '-rspec')
-    assert $stdout.string.match(/this command will initiate a git project./)
+    assert $stdout.string.match(/A git project already exists in this directory./)
     assert $stdout.string.match(/The Opening Act has performed./)
     assert_equal 1, Dir.glob('bubbles').length
     assert_equal 1, Dir.glob('bubbles/spec').length

@@ -12,7 +12,7 @@ class OpeningAct
   extend Verifiable
 
   def self.perform(name, test_name)
-    return leave_the_stage unless play_on?
+    return leave_the_stage if nested_git? && quit_playing?
 
     setup(name, test_name)
     add_overwrite_rename_or_quit while directory_exists?
@@ -58,16 +58,20 @@ class OpeningAct
     test_type[0] == '-'
   end
 
+  def self.nested_git?
+    File.exists? '.git'
+  end
+
   def self.overwrite_existing_dir
     FileUtils.rm_rf(template.name)
 
     overwrite_confirmation
   end
 
-  def self.play_on?
-    new_git_confirmation
+  def self.quit_playing?
+    nested_git_confirmation
 
-    !%w[quit q].include?(user_input.downcase)
+    user_input.downcase != 'continue'
   end
 
   def self.rename_project

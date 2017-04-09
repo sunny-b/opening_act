@@ -22,7 +22,7 @@ module Outputable
   end
 
   def take_the_stage
-    puts '> The Opening Act has begun to play. This may take a moment.'
+    puts '> The Opening Act has begun to perform. This may take a moment.'
   end
 
   def add_confirmation
@@ -39,9 +39,9 @@ module Outputable
     puts "> Your project has been renamed to '#{template.name}'."
   end
 
-  def new_git_confirmation
-    puts '> Running this command will initiate a git project.'
-    puts "> Make sure you aren't running this inside another git project."
-    puts '> Type QUIT if you wish to stop. Otherwise, click Enter.'
+  def nested_git_confirmation
+    puts '> A git project already exists in this directory.'
+    puts '> Running OpeningAct will create a nested git.'
+    puts '> Type CONTINUE if you wish to continue. Otherwise, press Enter.'
   end
 end
