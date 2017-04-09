@@ -31,6 +31,7 @@ class OpeningActTest < Minitest::Test
     assert_equal 1, Dir.glob('bubbles/Gemfile').length
     assert_equal 1, Dir.glob('bubbles/.git').length
     assert_equal 1, Dir.glob('bubbles/Rakefile').length
+    assert_equal 1, Dir.glob('bubbles/Procfile').length
   end
 
   def test_success_rspec
@@ -43,6 +44,7 @@ class OpeningActTest < Minitest::Test
     assert_equal 1, Dir.glob('bubbles/Gemfile').length
     assert_equal 1, Dir.glob('bubbles/Rakefile').length
     assert_equal 1, Dir.glob('bubbles/.git').length
+    assert_equal 1, Dir.glob('bubbles/Procfile').length
   end
 
   def test_missing_project_name
