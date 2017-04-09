@@ -50,7 +50,7 @@ class OpeningActTest < Minitest::Test
     OpeningAct.send(:setup, nil, '-minitest')
 
     assert $stdout.string.match(/What do you want to name your project?/)
-    assert_equal 'bubbles', OpeningAct.send(:name)
+    assert_equal 'bubbles', OpeningAct.send(:template).name
   end
 
   def test_missing_test_type
@@ -58,12 +58,12 @@ class OpeningActTest < Minitest::Test
     OpeningAct.send(:setup, 'bubbles', nil)
 
     assert $stdout.string.match(/Do you prefer rspec or minitest?/)
-    assert_equal 'minitest', OpeningAct.send(:test_or_spec)
+    assert_equal 'minitest', OpeningAct.send(:template).test_type
   end
 
   def test_user_input
-    $stdin = StringIO.new('test1')
-    assert_equal 'test1', OpeningAct.send(:user_input)
+    $stdin = StringIO.new('bubbles')
+    assert_equal 'bubbles', OpeningAct.send(:user_input)
   end
 
   def test_command_input_add
@@ -118,7 +118,7 @@ class OpeningActTest < Minitest::Test
     OpeningAct.send(:add_overwrite_rename_or_quit)
 
     assert $stdout.string.match(/It appears another directory by this name already exists./)
-    assert $stdout.string.match(/Files were added to existing directory 'bubbles'./)
+    assert $stdout.string.match(/Files will be added to existing directory 'bubbles'./)
   end
 
   def test_directory_already_exists_overwrite
@@ -129,16 +129,16 @@ class OpeningActTest < Minitest::Test
     OpeningAct.send(:add_overwrite_rename_or_quit)
 
     assert $stdout.string.match(/It appears another directory by this name already exists./)
-    assert $stdout.string.match(/'bubbles' has been overwritten./)
+    assert $stdout.string.match(/'bubbles' will be overwritten./)
   end
 
   def test_rename_project_to_bubbles
-    assert_equal 'test1', OpeningAct.send(:rename_to, 'test1')
-    assert_equal 'test1', OpeningAct.send(:name)
+    $stdin = StringIO.new('test1')
+    OpeningAct.send(:setup, nil, '-minitest')
 
     $stdin = StringIO.new('bubbles')
-    assert_equal 'bubbles', OpeningAct.send(:rename_project)
-    assert_equal 'bubbles', OpeningAct.send(:name)
+    OpeningAct.send(:rename_project)
+    assert_equal 'bubbles', OpeningAct.send(:template).name
 
     assert $stdout.string.match(/What do you want to name your project?/)
     assert $stdout.string.match(/Your project has been renamed to 'bubbles'./)
@@ -149,7 +149,7 @@ class OpeningActTest < Minitest::Test
 
     $stdin = StringIO.new('bubbles')
     OpeningAct.send(:determine_action, 'rename')
-    assert_equal 'bubbles', OpeningAct.send(:name)
+    assert_equal 'bubbles', OpeningAct.send(:template).name
 
     assert $stdout.string.match(/What do you want to name your project?/)
     assert $stdout.string.match(/Your project has been renamed to 'bubbles'./)
@@ -157,18 +157,18 @@ class OpeningActTest < Minitest::Test
 
   def test_setup
     OpeningAct.send(:setup, 'test1', '-minitest')
-    assert_equal 'test1', OpeningAct.send(:name)
-    assert_equal 'minitest', OpeningAct.send(:test_or_spec)
+    assert_equal 'test1', OpeningAct.send(:template).name
+    assert_equal 'minitest', OpeningAct.send(:template).test_type
   end
 
   def test_remove_extra_test_files_bubbles_test
     OpeningAct.send(:setup, 'bubbles', '-minitest')
 
-    OpeningAct.send(:create_template_files)
+    OpeningAct.send(:template).create
     assert_equal 1, Dir.glob('bubbles').length
     assert_equal 5, Dir.glob('bubbles/*_*').length
 
-    OpeningAct.send(:remove_extra_test_files, 'spec')
+    OpeningAct.send(:template).remove_extra_files
     assert_equal 1, Dir.glob('bubbles').length
     assert_equal 3, Dir.glob('bubbles/*_*').length
     assert_equal 1, Dir.glob('bubbles/test').length
@@ -179,11 +179,11 @@ class OpeningActTest < Minitest::Test
   def test_remove_extra_test_files_bubbles_spec
     OpeningAct.send(:setup, 'bubbles', '-rspec')
 
-    OpeningAct.send(:create_template_files)
+    OpeningAct.send(:template).create
     assert_equal 1, Dir.glob('bubbles').length
     assert_equal 5, Dir.glob('bubbles/*_*').length
 
-    OpeningAct.send(:remove_extra_test_files, 'test')
+    OpeningAct.send(:template).remove_extra_files
     assert_equal 1, Dir.glob('bubbles').length
     assert_equal 3, Dir.glob('bubbles/*_*').length
     assert_equal 1, Dir.glob('bubbles/spec').length
@@ -193,9 +193,9 @@ class OpeningActTest < Minitest::Test
 
   def test_rename_files_bubbles_spec
     OpeningAct.send(:setup, 'bubbles', '-rspec')
-    OpeningAct.send(:create_template_files)
-    OpeningAct.send(:remove_extra_test_files, 'test')
-    OpeningAct.send(:rename_template_files)
+    OpeningAct.send(:template).create
+    OpeningAct.send(:template).remove_extra_files
+    OpeningAct.send(:template).rename_files
 
     assert_equal 1, Dir.glob('bubbles').length
     assert_equal 0, Dir.glob('bubbles/*_*').length
@@ -208,9 +208,9 @@ class OpeningActTest < Minitest::Test
 
   def test_rename_files_bubbles_test
     OpeningAct.send(:setup, 'bubbles', '-minitest')
-    OpeningAct.send(:create_template_files)
-    OpeningAct.send(:remove_extra_test_files, 'spec')
-    OpeningAct.send(:rename_template_files)
+    OpeningAct.send(:template).create
+    OpeningAct.send(:template).remove_extra_files
+    OpeningAct.send(:template).rename_files
 
     assert_equal 1, Dir.glob('bubbles').length
     assert_equal 0, Dir.glob('bubbles/*_*').length
