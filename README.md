@@ -18,9 +18,52 @@ Once you install OpeningAct on your machine, you will have access to the executa
 
 OpeningAct will prompt you to provide a name for your project and your preferred test framework (Rspec or Minitest).
 
-You can also pass in 
+You can also pass in a name and a test type (as a flag):
 
+    $ opening sample -minitest
 
+    OR
+
+    $ opening -minitest sample
+
+It will create a project directory with all your starter files:
+
+```
+├── .git
+├── Gemfile
+├── Gemfile.lock
+├── LICENSE.txt
+├── Procfile
+├── README.md
+├── Rakefile
+├── config.ru
+├── environment.rb
+├── public
+│   ├── javascript
+│   │   └── script.js
+│   └── stylesheets
+│       ├── main.css
+│       └── reset.css
+├── sample.rb
+├── test
+│   ├── sample_test.rb
+│   └── test_helper.rb
+└── views
+    ├── index.erb
+    └── layout.erb
+
+5 directories, 17 files
+```
+
+Once OpeningAct has run, you're ready for development. Just run
+
+    $ ruby your_app_name.rb
+
+    OR
+
+    $ heroku local web
+
+to see your Sinatra application.
 
 ## Development
 
