@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.email         = ['sjbeatteay@gmail.com']
 
   spec.summary       = 'A tool that creates the Sinatra development environment for you.'
-  spec.description   = "A gem that auto generates all the files, folders and tests you'll need to start you Sinatra application."
+  spec.description   = "A gem that auto generates all the files, folders and tests you'll need to start your Sinatra application."
   spec.homepage      = 'https://github.com/sunny-b/opening_act'
   spec.license       = 'MIT'
 
