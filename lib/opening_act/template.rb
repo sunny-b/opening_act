@@ -17,6 +17,7 @@ class Template
   def initiate_project
     Dir.chdir name do
       `git init`
+      `gem install bundler`
       `bundle install`
     end
   end
