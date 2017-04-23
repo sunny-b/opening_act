@@ -59,7 +59,7 @@ class OpeningAct
   end
 
   def self.nested_git?
-    File.exists? '.git'
+    File.exist? '.git'
   end
 
   def self.overwrite_existing_dir
