@@ -1,1 +1,1 @@
-# Your database file can go here
+# Your model file goes here
